@@ -49,6 +49,7 @@ namespace AwokenNotifications
         private void InfoForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (Exitable) return;
+            Awake.Stop();
             Sleep.Start();
             e.Cancel = true;
         }
