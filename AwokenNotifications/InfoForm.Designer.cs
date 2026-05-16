@@ -47,6 +47,7 @@
             DisplayText.Text = "Tubby's eyes have awoken";
             DisplayText.TextAlign = ContentAlignment.MiddleCenter;
             DisplayText.TextChanged += DisplayText_TextChanged;
+            DisplayText.Click += DisplayText_Click;
             // 
             // Awake
             // 

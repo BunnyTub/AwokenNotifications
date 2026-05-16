@@ -98,5 +98,10 @@ namespace AwokenNotifications
         private void DisplayText_TextChanged(object sender, EventArgs e)
         {
         }
+
+        private void DisplayText_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
