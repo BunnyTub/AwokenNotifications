@@ -5,20 +5,31 @@ namespace AwokenNotifications
     public partial class InfoForm : Form
     {
         private readonly Awoken AwokenParent;
+        private readonly Screen? CurrentScreen;
 
-        public InfoForm(Awoken parent, int timeout)
+        public InfoForm(Awoken parent, int timeout, Screen? screen)
         {
             InitializeComponent();
             AwokenParent = parent;
             AutoClose.Interval = timeout;
+            CurrentScreen = screen;
         }
 
         private void InfoForm_Load(object sender, EventArgs e)
         {
-            Screen? screen = Screen.PrimaryScreen;
-            if (screen != null) Size = new Size(screen.WorkingArea.Width, Size.Height);
+            if (CurrentScreen != null)
+            {
+                Rectangle rect = CurrentScreen.WorkingArea;
 
-            CenterToScreen();
+                Size size = TextRenderer.MeasureText(
+                    DisplayText.Text,
+                    DisplayText.Font,
+                    new Size(rect.Width, int.MaxValue),
+                    TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
+
+                Size = new Size(rect.Width, size.Height + 15);
+                Location = new(rect.Location.X, rect.Location.Y + rect.Height / 2 - ((size.Height + 15) / 2));
+            }
         }
 
         private void Awake_Tick(object sender, EventArgs e)
@@ -76,15 +87,6 @@ namespace AwokenNotifications
                     Console.Beep(2600, 50);
                 }
             }
-
-            Size size = TextRenderer.MeasureText(
-                DisplayText.Text,
-                DisplayText.Font,
-                new Size(Width, int.MaxValue),
-                TextFormatFlags.WordBreak);
-
-            Height = size.Height + 20;
-            CenterToScreen();
         }
 
         private void ListAutoClose_Tick(object sender, EventArgs e)

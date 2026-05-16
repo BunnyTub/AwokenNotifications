@@ -16,6 +16,7 @@
             Message = text;
             BackColor = text.OverlayBackColor;
             DismissTimeout = timeout;
+            CurrentScreen = Screen.PrimaryScreen;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -66,13 +67,21 @@
             e.Cancel = true;
         }
 
+        private readonly Screen? CurrentScreen;
+
+        private void OverlayForm_Load(object sender, EventArgs e)
+        {
+            if (CurrentScreen != null)
+            {
+                Rectangle rect = CurrentScreen.WorkingArea;
+                Size = new Size(rect.Width, rect.Height);
+                Location = rect.Location;
+            }
+        }
+
         private void OverlayForm_Shown(object sender, EventArgs e)
         {
-            //CenterToScreen();
-            //BringToFront();
-            //Activate();
-
-            info = new InfoForm(AwokenParent, DismissTimeout);
+            info = new InfoForm(AwokenParent, DismissTimeout, CurrentScreen);
             info.DisplayText.Text = Message.Text;
             info.DisplayText.ForeColor = Message.ForeColor;
             info.DisplayText.BackColor = Message.BackColor;
@@ -95,18 +104,6 @@
         private void ShowNew_Tick(object sender, EventArgs e)
         {
             ShowNew.Enabled = false;
-        }
-
-        private void OverlayForm_Load(object sender, EventArgs e)
-        {
-            Screen? screen = Screen.PrimaryScreen;
-
-            if (screen != null)
-            {
-                Rectangle rect = screen.WorkingArea;
-                Size = new Size(rect.Width, rect.Height);
-                Location = rect.Location;
-            }
         }
     }
 }

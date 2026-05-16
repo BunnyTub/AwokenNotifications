@@ -2,9 +2,9 @@
 
 namespace AwokenNotifications
 {
-    public static class WindowUtils
+    internal static class WindowUtils
     {
-        public static void EnableAcrylic(IWin32Window window, Color blurColor)
+        internal static void EnableAcrylic(IWin32Window window, Color blurColor)
         {
             ArgumentNullException.ThrowIfNull(window);
 
@@ -27,7 +27,7 @@ namespace AwokenNotifications
             }
         }
 
-        private static uint ToAbgr(Color color)
+        internal static uint ToAbgr(Color color)
         {
             return ((uint)color.A << 24) | ((uint)color.B << 16) | ((uint)color.G << 8) | color.R;
         }
