@@ -21,7 +21,7 @@
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            WindowUtils.EnableAcrylic(this, Color.FromArgb(128, Message.OverlayBackColor));
+            WindowUtilities.EnableAcrylic(this, Color.FromArgb(128, Message.OverlayBackColor));
 
             base.OnHandleCreated(e);
         }

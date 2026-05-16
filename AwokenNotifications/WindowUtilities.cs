@@ -2,7 +2,7 @@
 
 namespace AwokenNotifications
 {
-    internal static class WindowUtils
+    internal static class WindowUtilities
     {
         internal static void EnableAcrylic(IWin32Window window, Color blurColor)
         {
