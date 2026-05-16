@@ -6,10 +6,11 @@ namespace AwokenNotifications
     {
         private readonly Awoken AwokenParent;
 
-        public InfoForm(Awoken parent)
+        public InfoForm(Awoken parent, int timeout)
         {
             InitializeComponent();
             AwokenParent = parent;
+            AutoClose.Interval = timeout;
         }
 
         private void InfoForm_Load(object sender, EventArgs e)
@@ -63,12 +64,37 @@ namespace AwokenNotifications
 
         private void InfoForm_Shown(object sender, EventArgs e)
         {
-            awake.Play();
+            if (AwokenParent.PlayChime)
+            {
+                try
+                {
+                    awake.Play();
+                }
+                catch (Exception)
+                {
+                    Console.Beep(2000, 50);
+                    Console.Beep(2600, 50);
+                }
+            }
+
+            Size size = TextRenderer.MeasureText(
+                DisplayText.Text,
+                DisplayText.Font,
+                new Size(Width, int.MaxValue),
+                TextFormatFlags.WordBreak);
+
+            Height = size.Height + 20;
+            CenterToScreen();
         }
 
         private void ListAutoClose_Tick(object sender, EventArgs e)
         {
             if (AwokenParent.BasicTextQueue.Count > 0) Close();
+            else if (AwokenParent.TextQueue.Count > 0) Close();
+        }
+
+        private void DisplayText_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 }

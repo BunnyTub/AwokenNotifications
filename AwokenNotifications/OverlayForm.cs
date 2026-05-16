@@ -4,17 +4,31 @@
     {
         private readonly bool UseBackgroundOverlay = true;
         private readonly Awoken AwokenParent;
-        private readonly InfoForm info;
+        private readonly AwokenText Message;
+        private readonly int DismissTimeout;
+        private InfoForm? info;
 
-        public OverlayForm(Awoken parent, bool useBackground, string text = "Tubby's eyes have awoken")
+        public OverlayForm(Awoken parent, bool useBackground, AwokenText text, int timeout = 3000)
         {
             InitializeComponent();
             UseBackgroundOverlay = useBackground;
             AwokenParent = parent;
-            info = new InfoForm(AwokenParent);
-            info.DisplayText.Text = text;
+            Message = text;
+            BackColor = text.OverlayBackColor;
+            DismissTimeout = timeout;
         }
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            WindowUtils.EnableAcrylic(this, Color.FromArgb(128, Message.OverlayBackColor));
+
+            base.OnHandleCreated(e);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            e.Graphics.Clear(Color.Transparent);
+        }
 
         private void Awake_Tick(object sender, EventArgs e)
         {
@@ -26,7 +40,7 @@
                 return;
             }
 
-            Opacity += 0.10;
+            Opacity += 0.1;
         }
 
         private void Sleep_Tick(object sender, EventArgs e)
@@ -39,7 +53,7 @@
                 return;
             }
 
-            Opacity -= 0.10;
+            Opacity -= 0.1;
         }
 
         private bool Exitable = false;
@@ -58,14 +72,41 @@
             //BringToFront();
             //Activate();
 
+            info = new InfoForm(AwokenParent, DismissTimeout);
+            info.DisplayText.Text = Message.Text;
+            info.DisplayText.ForeColor = Message.ForeColor;
+            info.DisplayText.BackColor = Message.BackColor;
+
             info.FormClosed += (a, b) =>
             {
-                if (AwokenParent.BasicTextQueue.Count == 0) Thread.Sleep(500);
+                //if (AwokenParent.BasicTextQueue.Count == 0)
+                //{
+                //    await Task.Delay(500); // Thread.Sleep(500);
+                //}
                 Close();
             };
+
             info.ShowDialog();
+
             //info.BringToFront();
             //info.Activate();
+        }
+
+        private void ShowNew_Tick(object sender, EventArgs e)
+        {
+            ShowNew.Enabled = false;
+        }
+
+        private void OverlayForm_Load(object sender, EventArgs e)
+        {
+            Screen? screen = Screen.PrimaryScreen;
+
+            if (screen != null)
+            {
+                Rectangle rect = screen.WorkingArea;
+                Size = new Size(rect.Width, rect.Height);
+                Location = rect.Location;
+            }
         }
     }
 }

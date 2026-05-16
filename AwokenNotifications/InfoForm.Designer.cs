@@ -39,13 +39,14 @@
             // DisplayText
             // 
             DisplayText.Dock = DockStyle.Fill;
-            DisplayText.Font = new Font("Century Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DisplayText.Font = new Font("Segoe UI", 27.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             DisplayText.Location = new Point(0, 0);
             DisplayText.Name = "DisplayText";
             DisplayText.Size = new Size(933, 64);
             DisplayText.TabIndex = 0;
             DisplayText.Text = "Tubby's eyes have awoken";
             DisplayText.TextAlign = ContentAlignment.MiddleCenter;
+            DisplayText.TextChanged += DisplayText_TextChanged;
             // 
             // Awake
             // 
@@ -72,7 +73,7 @@
             // InfoForm
             // 
             AutoScaleMode = AutoScaleMode.None;
-            BackColor = Color.FromArgb(15, 15, 15);
+            BackColor = Color.FromArgb(20, 20, 20);
             ClientSize = new Size(933, 64);
             ControlBox = false;
             Controls.Add(DisplayText);
